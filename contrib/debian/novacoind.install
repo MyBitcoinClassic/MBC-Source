@@ -1,0 +1,2 @@
+debian/bin/MyBitcoinClassicd usr/bin
+src/MyBitcoinClassicd usr/lib/MyBitcoinClassic

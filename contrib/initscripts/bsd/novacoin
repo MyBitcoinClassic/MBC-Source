@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: MyBitcoinClassic
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# MyBitcoinClassic_enable (bool): Set to NO by default. Set this variable to YES if you want to enable MyBitcoinClassic service.
+# MyBitcoinClassic_config (path): Set to /usr/local/etc/MyBitcoinClassic.conf by default.
+# MyBitcoinClassic_user:  The user account MyBitcoinClassic daemon runs as. It uses 'root' user by default.
+# MyBitcoinClassic_group: The group account MyBitcoinClassic daemon runs as. It uses 'wheel' group by default.
+# MyBitcoinClassic_datadir (str): Default to "/var/db/MyBitcoinClassic". Base data directory.
+
+. /etc/rc.subr
+
+name=MyBitcoinClassic
+rcvar=MyBitcoinClassic_enable
+
+: ${MyBitcoinClassic_enable:=NO}
+: ${MyBitcoinClassic_config=/usr/local/etc/MyBitcoinClassic.conf}
+: ${MyBitcoinClassic_datadir=/var/db/MyBitcoinClassic}
+: ${MyBitcoinClassic_user="root"}
+: ${MyBitcoinClassic_group="wheel"}
+
+required_files=${MyBitcoinClassic_config}
+command=/usr/local/bin/MyBitcoinClassicd
+MyBitcoinClassic_chdir=${MyBitcoinClassic_datadir}
+pidfile="${MyBitcoinClassic_datadir}/MyBitcoinClassicd.pid"
+stop_cmd=MyBitcoinClassic_stop
+command_args="-conf=${MyBitcoinClassic_config} -datadir=${MyBitcoinClassic_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+MyBitcoinClassic_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${MyBitcoinClassic_datadir}
+	[ $? -eq 0 ] && chown -R ${MyBitcoinClassic_user}:${MyBitcoinClassic_group} ${MyBitcoinClassic_datadir}
+}
+
+MyBitcoinClassic_prestart()
+{
+	if [ ! -d "${MyBitcoinClassic_datadir}/." ]; then
+		MyBitcoinClassic_create_datadir || return 1
+	fi
+}
+
+MyBitcoinClassic_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+MyBitcoinClassic_stop()
+{
+    MyBitcoinClassic_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${MyBitcoinClassic_config} -datadir=${MyBitcoinClassic_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

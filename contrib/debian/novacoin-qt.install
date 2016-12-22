@@ -1,0 +1,5 @@
+MyBitcoinClassic-qt usr/bin
+share/pixmaps/MyBitcoinClassic32.xpm usr/share/pixmaps
+share/pixmaps/MyBitcoinClassic80.xpm usr/share/pixmaps
+debian/MyBitcoinClassic-qt.desktop usr/share/applications
+debian/MyBitcoinClassic-qt.protocol usr/share/kde4/services/

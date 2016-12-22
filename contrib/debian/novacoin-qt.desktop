@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MyBitcoinClassic
+Comment=MyBitcoinClassic P2P Cryptocurrency
+Comment[ru]=MyBitcoinClassic, P2P криптовалюта
+Comment[fr]=MyBitcoinClassic, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=MyBitcoinClassic, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/MyBitcoinClassic-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/MyBitcoinClassic80.xpm
+MimeType=x-scheme-handler/MyBitcoinClassic;
+Categories=Office;
